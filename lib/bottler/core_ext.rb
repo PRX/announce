@@ -1,6 +1,7 @@
 begin
   require 'active_support/core_ext/hash/keys'
   require 'active_support/core_ext/hash/deep_merge'
+  require 'active_support/core_ext/hash/slice'
 rescue LoadError
   class Hash
     def stringify_keys
@@ -26,6 +27,11 @@ rescue LoadError
       end
       self
     end if !{}.respond_to?(:deep_symbolize_keys)
+
+    def slice(*keys)
+      keys.map! { |key| convert_key(key) } if respond_to?(:convert_key, true)
+      keys.each_with_object(self.class.new) { |k, hash| hash[k] = self[k] if has_key?(k) }
+    end
   end
 end
 
