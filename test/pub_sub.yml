@@ -1,7 +1,7 @@
 # Configuration file that defines the settings for pub/sub of events
 app_name: app
 
-adapter: shoryuken
+adapter: inline
 
 publish:
   foo:
@@ -10,5 +10,6 @@ publish:
 subscribe:
   bar:
     - deleted
+
 queues:
   VisibilityTimeout: 60

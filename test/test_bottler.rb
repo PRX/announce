@@ -15,4 +15,10 @@ describe Bottler do
     ::Bottler.options.wont_be_nil
     ::Bottler.options.must_be_instance_of Hash
   end
+
+  it 'can configure options' do
+    ::Bottler.configure do |options|
+      options.wont_be_nil
+    end
+  end
 end
