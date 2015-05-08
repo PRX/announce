@@ -1,8 +1,10 @@
-require 'coveralls'
-Coveralls.wear!
-
 require 'simplecov'
 SimpleCov.start
+
+if ENV['TRAVIS']
+  require 'coveralls'
+  Coveralls.wear!
+end
 
 ENV['APP_ENV'] = 'test'
 ENV['AWS_ACCESS_KEY_ID'] = 'ANDTHISISFAKEOKAY'
