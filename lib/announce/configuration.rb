@@ -1,13 +1,13 @@
 require 'yaml'
 require 'erb'
 
-module Bottler
+module Announce
   class Configuration
     attr_reader :options
 
     def self.configure(options={})
       opts = new(options).configure
-      Bottler.options.merge!(opts)
+      Announce.options.merge!(opts)
     end
 
     def initialize(options)
@@ -24,7 +24,7 @@ module Bottler
       if File.exist?(pub_sub_file)
         YAML.load(ERB.new(IO.read(pub_sub_file)).result).deep_symbolize_keys
       else
-        Bottler.logger.warn "PubSub file #{pub_sub_file} does not exist"
+        Announce.logger.warn "PubSub file #{pub_sub_file} does not exist"
         {}
       end
     end

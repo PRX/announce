@@ -50,4 +50,14 @@ rescue LoadError
       constant
     end
   end if !"".respond_to?(:constantize)
+
+  class String
+    def camelize
+      string = self
+      string = string.sub(/^[a-z\d]*/) { $&.capitalize }
+      string.gsub!(/(?:_|(\/))([a-z\d]*)/i) { "#{$1}#{$2.capitalize}" }
+      string.gsub!(/\//, '::')
+      string
+    end
+  end if !"".respond_to?(:camelize)
 end
