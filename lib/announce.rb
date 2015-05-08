@@ -1,7 +1,11 @@
-require 'announce/version'
-require 'announce/core_ext'
-require 'announce/configuration'
 require 'logger'
+
+require 'announce/configuration'
+require 'announce/core_ext'
+require 'announce/message'
+require 'announce/publisher'
+require 'announce/subscriber'
+require 'announce/version'
 
 module Announce
   class << self
