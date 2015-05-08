@@ -2,13 +2,12 @@ require 'simplecov'
 require 'codeclimate-test-reporter'
 require 'coveralls'
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-  SimpleCov.formatter,
-  Coveralls::SimpleCov::Formatter,
-  CodeClimate::TestReporter::Formatter
-]
 SimpleCov.start
-Coveralls.wear!
+
+if ENV['TRAVIS']
+  CodeClimate::TestReporter.start
+  Coveralls.wear!
+end
 
 ENV['AWS_ACCESS_KEY_ID'] = 'ANDTHISISFAKEOKAY'
 ENV['AWS_SECRET_ACCESS_KEY'] = 'andthisisalsoveryfakesodontbefooledandtrytouseit'
