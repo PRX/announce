@@ -1,8 +1,17 @@
+ENV['AWS_ACCESS_KEY_ID'] = 'ANDTHISISFAKEOKAY'
+ENV['AWS_SECRET_ACCESS_KEY'] = 'andthisisalsoveryfakesodontbefooledandtrytouseit'
+ENV['AWS_REGION'] = 'us-east-1'
+ENV['AWS_ACCOUNT_ID'] = '123456789012'
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'announce'
 require 'announce/adapters/test_adapter'
 
 require 'minitest/autorun'
+
+class TestPublisher
+  include Announce::Publisher
+end
 
 class TestSubscriber
 
