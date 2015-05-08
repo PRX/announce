@@ -17,6 +17,10 @@ module Announce
       end
     end
 
+    def perform(*args)
+      delegate_event(*args)
+    end
+
     # For use in adapters to delegate to method named receive_subject_action
     def delegate_event(event)
       @message = event.deep_symbolize_keys
