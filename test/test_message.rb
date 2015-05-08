@@ -9,14 +9,14 @@ describe Announce::Message do
     msg = ::Announce::Message.new(subject: 'test', action: 'run', body: { foo: 'bar' } )
     msg.wont_be_nil
     msg.options.wont_be_nil
-    msg.options[:subject].must_equal 'test'
-    msg.options[:action].must_equal 'run'
+    msg.options['subject'].must_equal 'test'
+    msg.options['action'].must_equal 'run'
   end
 
   it 'can default options' do
-    announce_message.options[:message_id].wont_be_nil
-    announce_message.options[:sent_at].must_be_instance_of Time
-    announce_message.options[:app].must_equal 'app'
+    announce_message.options['message_id'].wont_be_nil
+    announce_message.options['sent_at'].must_be_instance_of Time
+    announce_message.options['app'].must_equal 'app'
   end
 
   it 'can serialize to json' do
