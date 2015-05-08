@@ -2,8 +2,6 @@ require 'test_helper'
 require 'announce/configuration'
 require 'announce/adapters/base_adapter'
 
-class TestSubscriber; end
-
 describe Announce::Adapters::BaseAdapter do
   let(:base_adapter_class) { Announce::Adapters::BaseAdapter }
 
@@ -13,7 +11,7 @@ describe Announce::Adapters::BaseAdapter do
 
   it 'can publish a message' do
     base_adapter_class.publish('subject', 'action', 'body', {})
-    last_message['body'].must_equal 'body'
+    last_message[:body].must_equal 'body'
   end
 
   it 'can subscribe' do
