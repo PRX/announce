@@ -8,7 +8,7 @@ if ENV['TRAVIS']
   CodeClimate::TestReporter.start
   Coveralls.wear!
 end
-
+ENV['APP_ENV'] = 'test'
 ENV['AWS_ACCESS_KEY_ID'] = 'ANDTHISISFAKEOKAY'
 ENV['AWS_SECRET_ACCESS_KEY'] = 'andthisisalsoveryfakesodontbefooledandtrytouseit'
 ENV['AWS_REGION'] = 'us-east-1'

@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/PRX/announce.svg?branch=master)](https://travis-ci.org/PRX/announce)
 [![Code Climate](https://codeclimate.com/github/PRX/announce/badges/gpa.svg)](https://codeclimate.com/github/PRX/announce)
-[![Coverage Status](https://coveralls.io/repos/PRX/announce/badge.svg?branch=master)](https://coveralls.io/r/PRX/announce?branch=master)
+[![Coverage Status](https://coveralls.io/repos/PRX/announce/badge.svg)](https://coveralls.io/r/PRX/announce)
 [![Dependency Status](https://gemnasium.com/PRX/announce.svg)](https://gemnasium.com/PRX/announce)
 
 ### Announce lets your services know about events, and helps you process them.

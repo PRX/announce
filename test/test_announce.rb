@@ -28,7 +28,7 @@ describe Announce do
 
   it 'has default options' do
     defaults = Announce.default_options
-    defaults[:name_prefix].must_equal 'development'
+    defaults[:name_prefix].must_equal 'test'
     defaults[:adapter].must_equal :inline
   end
 
