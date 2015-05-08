@@ -2,10 +2,3 @@ language: ruby
 rvm:
   - 2.1.2
   - 2.2.1
-env:
-  global:
-    - TRAVIS=true
-    - CODECLIMATE_REPO_TOKEN=37c6f8d75bb1f20d34e79cab97e3ed0de6c9be552b15fbbbc4daf4f383c55ae4
-addons:
-  code_climate:
-    repo_token: 37c6f8d75bb1f20d34e79cab97e3ed0de6c9be552b15fbbbc4daf4f383c55ae4

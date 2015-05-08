@@ -1,12 +1,8 @@
-if ENV['TRAVIS']
-  require 'coveralls'
-  require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
-  Coveralls.wear!
-else
-  require 'simplecov'
-  SimpleCov.start
-end
+require 'coveralls'
+Coveralls.wear!
+
+require 'simplecov'
+SimpleCov.start
 
 ENV['APP_ENV'] = 'test'
 ENV['AWS_ACCESS_KEY_ID'] = 'ANDTHISISFAKEOKAY'
