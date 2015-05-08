@@ -1,8 +1,8 @@
 # Announce
 
-## Announce likes to puts messages in bottles.
+## Announce lets your services know about events, and helps you process them.
 
-Announce is a gem to support using pub sub messages for events, built on top of shoryuken.
+Announce is a gem to support using pub sub messages for events, built on top of other job processors like shoryuken and using ActiveJob.
 
 ## Installation
 
