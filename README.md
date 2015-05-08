@@ -1,15 +1,15 @@
-# Bottler
+# Announce
 
-## Bottler likes to puts messages in bottles.
+## Announce likes to puts messages in bottles.
 
-Bottler is a gem to support using pub sub messages for events, built on top of shoryuken.
+Announce is a gem to support using pub sub messages for events, built on top of shoryuken.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'bottler'
+gem 'announce'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install bottler
+    $ gem install announce
 
 ## Usage
 
@@ -32,7 +32,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/bottler/fork )
+1. Fork it ( https://github.com/[my-github-username]/announce/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
