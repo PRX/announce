@@ -1,8 +1,16 @@
 # Announce
 
-## Announce lets your services know about events, and helps you process them.
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/PRX/announce.svg?branch=master)](https://travis-ci.org/PRX/announce)
+[![Code Climate](https://codeclimate.com/github/PRX/announce/badges/gpa.svg)](https://codeclimate.com/github/PRX/announce)
+[![Coverage Status](https://coveralls.io/repos/PRX/announce/badge.svg?branch=master)](https://coveralls.io/r/PRX/announce?branch=master)
+[![Dependency Status](https://gemnasium.com/PRX/announce.svg)](https://gemnasium.com/PRX/announce)
 
-Announce is a gem to support using pub sub messages for events, built on top of other job processors like shoryuken and using ActiveJob.
+### Announce lets your services know about events, and helps you process them.
+
+Announce is a gem to support using pub sub messages for events.
+
+It is built on top of other job processors, like shoryuken and ActiveJob to process the messages.
 
 ## Installation
 
