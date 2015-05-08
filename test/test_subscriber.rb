@@ -3,21 +3,6 @@ require 'announce/subscriber'
 
 describe Announce::Subscriber do
 
-  class TestSubscriber
-
-    include Announce::Subscriber
-
-    attr_accessor :received
-
-    def initialize
-      self.received = []
-    end
-
-    def receive_subject_action(message)
-      received << message
-    end
-  end
-
   before { clear_subscriptions }
 
   let (:subscriber_class) { TestSubscriber }
@@ -46,7 +31,7 @@ describe Announce::Subscriber do
 
   it 'calling delegate method save current message info' do
     subscriber.delegate_event(event_message)
-    em = subscriber.received.pop
+    em = subscriber_class.received.pop
     em.must_equal event_message[:body]
   end
 end

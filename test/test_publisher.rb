@@ -16,6 +16,6 @@ describe Announce::Publisher do
 
   it 'can publish a message' do
     publisher_class.publish('subject', 'action', { 'foo' => 'bar' }, {})
-    last_message['body']['foo'].must_equal 'bar'
+    last_message[:body]['foo'].must_equal 'bar'
   end
 end

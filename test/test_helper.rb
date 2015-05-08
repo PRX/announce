@@ -4,8 +4,23 @@ require 'announce/adapters/test_adapter'
 
 require 'minitest/autorun'
 
+class TestSubscriber
+
+  include Announce::Subscriber
+
+  @@received = []
+
+  def self.received
+    @@received
+  end
+
+  def receive_subject_action(message)
+    @@received << message
+  end
+end
+
 def last_message
-  JSON.parse(Announce::Adapters::TestAdapter::Topic.published_messages.pop)
+  Announce::Adapters::TestAdapter::Topic.published_messages.pop
 end
 
 def clear_messages
