@@ -13,15 +13,15 @@ describe Announce::Publisher do
     Announce::Adapters::TestAdapter::Topic.published_messages.pop
   end
 
-  let (:publisher) { TestPublisher }
+  let (:publisher_class) { TestPublisher }
+  let (:publisher) { publisher_class.new }
 
-  it 'creates a message object' do
-    message = publisher.message('subject', 'action', { 'foo' => 'bar' })
-    message.must_be_instance_of Announce::Message
-  end
+  before {
+    Announce::Adapters::TestAdapter::Topic.published_messages.clear
+  }
 
   it 'can publish a message' do
-    publisher.publish('subject', 'action', { 'foo' => 'bar' }, {})
+    publisher_class.publish('subject', 'action', { 'foo' => 'bar' }, {})
     message = JSON.parse(last_message.first)
     message['body']['foo'].must_equal 'bar'
   end

@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'announce'
+require 'announce/adapters/test_adapter'
 
 require 'minitest/autorun'
 

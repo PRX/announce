@@ -2,10 +2,18 @@ require 'announce/adapters/base_adapter'
 
 module Announce
   module Adapters
-    module TestAdapter
+    class TestAdapter < BaseAdapter
 
       class Subscriber < Announce::Adapters::BaseAdapter::Subscriber
+
+        @@subscriptions = []
+
+        def self.subscriptions
+          @@subscriptions
+        end
+
         def subscribe(worker_class, subject, actions, options)
+          @@subscriptions << [worker_class, subject, actions, options]
           true
         end
       end

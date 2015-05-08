@@ -2,8 +2,8 @@ require 'test_helper'
 
 describe Announce do
 
-  before { Announce.options[:adapter] = 'test' }
-  after { Announce.options[:adapter] = 'test' }
+  before(:each) { Announce.options[:adapter] = 'test' }
+  after(:each) { Announce.options[:adapter] = 'test' }
 
   it 'has a version number' do
     Announce::VERSION.wont_be_nil
@@ -32,19 +32,17 @@ describe Announce do
     defaults[:adapter].must_equal :inline
   end
 
-  it 'creates a topic instance' do
-    topic = Announce.topic('subject', 'action', {})
-    topic.must_be_instance_of Announce::Adapters::TestAdapter::Topic
+  it 'can publish a message' do
+    Announce.publish('subject', 'action', 'body', {})
   end
 
   it 'subscribes a worker' do
-    Announce.subscribe_worker(self.class, 'subject', ['action']).must_equal true
+    Announce.subscribe(self.class, 'subject', ['action']).must_equal true
   end
 
-  it 'loads an adapter class' do
-    subscriber = Announce.adapter_constantize('subscriber')
-    subscriber.must_be_instance_of Class
-    subscriber.new.must_be_instance_of Announce::Adapters::TestAdapter::Subscriber
+  it 'loads an adapter module' do
+    adapter = Announce.adapter_class
+    adapter.must_equal Announce::Adapters::TestAdapter
   end
 
   it 'has a default logger' do

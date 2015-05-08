@@ -22,4 +22,9 @@ describe Announce::Message do
     announce_message.options[:sent_at].must_be_instance_of Time
     announce_message.options[:app].must_equal 'test_app'
   end
+
+  it 'can serialize to json' do
+    msg = JSON.parse(announce_message.to_json)
+    msg['app'].must_equal 'test_app'
+  end
 end

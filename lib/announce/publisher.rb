@@ -10,15 +10,8 @@ module Announce
     end
 
     module ClassMethods
-
       def publish(subject, action, body, options = {})
-        topic = Announce.topic(subject, action, options)
-        msg = message(subject, action, body)
-        topic.publish(msg.to_json, options)
-      end
-
-      def message(subject, action, body)
-        Announce::Message.new(subject: subject, action: action, body: body)
+        Announce.publish(subject, action, body, options)
       end
     end
   end

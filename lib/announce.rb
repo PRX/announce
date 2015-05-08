@@ -5,6 +5,19 @@ require 'logger'
 
 module Announce
   class << self
+
+    def publish(subject, action, message, options={})
+      adapter_class.publish(subject, action, message, options)
+    end
+
+    def subscribe(worker_class, subject, actions = [], options = {})
+      adapter_class.subscribe(worker_class, subject, actions, options)
+    end
+
+    def configure_broker
+      adapter_class.configure_broker(options)
+    end
+
     def options
       @options ||= default_options
     end
@@ -12,10 +25,6 @@ module Announce
     def configure(opts = {})
       Announce::Configuration.configure(opts)
       yield @options if block_given?
-    end
-
-    def configure_broker
-      adapter_constantize(:broker_manager).new(options).configure
     end
 
     def default_options
@@ -32,18 +41,10 @@ module Announce
       end
     end
 
-    def topic(subject, action, options = {})
-      adapter_constantize(:topic).new(subject, action, options)
-    end
-
-    def subscribe_worker(worker_class, subject, actions=[], options={})
-      adapter_constantize(:subscriber).new.subscribe(worker_class, subject, actions, options)
-    end
-
-    def adapter_constantize(name)
+    def adapter_class
       adapter = Announce.options[:adapter]
       require "announce/adapters/#{adapter}_adapter"
-      "::Announce::Adapters::#{adapter.to_s.camelize}Adapter::#{name.to_s.camelize}".constantize
+      "::Announce::Adapters::#{adapter.to_s.camelize}Adapter".constantize
     end
 
     def logger
