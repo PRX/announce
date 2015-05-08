@@ -13,7 +13,7 @@ module Announce
         def publish(subject, action, body, options = {})
           topic = adapter_constantize(:topic).new(subject, action, options)
           msg = Announce::Message.new(subject: subject, action: action, body: body)
-          topic.publish(msg.to_json, options)
+          topic.publish(msg.to_message, options)
         end
 
         def subscribe(worker_class, subject, actions = [], options = {})

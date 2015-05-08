@@ -17,6 +17,10 @@ module Announce
       Announce.options[:app_name]
     end
 
+    def to_message
+      options
+    end
+
     def to_json
       options.to_json
     end
