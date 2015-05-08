@@ -62,6 +62,10 @@ module Announce
           raise NotImplementedError.new("You must implement create.")
         end
 
+        def self.name_for(subject, action)
+          [prefix, subject, action].join(delimiter)
+        end
+
         def initialize(subject, action, options = {})
           @subject = subject
           @action = action
@@ -86,9 +90,6 @@ module Announce
       end
 
       class Topic < Destination
-        def self.name_for(subject, action)
-          [prefix, subject, action].join(delimiter)
-        end
       end
 
       class Queue < Destination

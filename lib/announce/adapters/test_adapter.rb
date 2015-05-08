@@ -4,7 +4,7 @@ module Announce
   module Adapters
     class TestAdapter < BaseAdapter
 
-      class Subscriber < Announce::Adapters::BaseAdapter::Subscriber
+      class Subscriber < BaseAdapter::Subscriber
 
         @@subscriptions = []
 
@@ -18,13 +18,23 @@ module Announce
         end
       end
 
-      class BrokerManager < Announce::Adapters::BaseAdapter::BrokerManager
+      class BrokerManager < BaseAdapter::BrokerManager
+        @@configured = false
+
+        def self.reset
+          @@configured = false
+        end
+
+        def self.configured?
+          @@configured
+        end
+
         def configure
-          true
+          @@configured = true
         end
       end
 
-      class Topic < Announce::Adapters::BaseAdapter::Topic
+      class Topic < BaseAdapter::Topic
 
         @@published_messages = []
 
@@ -33,7 +43,7 @@ module Announce
         end
 
         def publish(message, options = {})
-          @@published_messages << [message, options]
+          @@published_messages << message
           true
         end
 
@@ -42,7 +52,7 @@ module Announce
         end
       end
 
-      class Queue < Announce::Adapters::BaseAdapter::Queue
+      class Queue < BaseAdapter::Queue
         def create
           true
         end

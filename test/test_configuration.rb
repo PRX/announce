@@ -3,8 +3,8 @@ require 'announce/configuration'
 
 describe Announce::Configuration do
 
-  before(:each) { Announce.options[:adapter] = 'test' }
-  after(:each) { Announce.options[:adapter] = 'test' }
+  before(:each) { reset_announce }
+  after(:each) { reset_announce }
 
   it 'will return empty hash without a config file' do
     Announce::Configuration.configure(pub_sub_file: 'doesntexist.yml')

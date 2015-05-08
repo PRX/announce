@@ -18,13 +18,7 @@ describe Announce::Subscriber do
     end
   end
 
-  def last_subscription
-    Announce::Adapters::TestAdapter::Subscriber.subscriptions.pop
-  end
-
-  before {
-    Announce::Adapters::TestAdapter::Subscriber.subscriptions.clear
-  }
+  before { clear_subscriptions }
 
   let (:subscriber_class) { TestSubscriber }
   let (:subscriber) { subscriber_class.new }

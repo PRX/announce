@@ -2,8 +2,8 @@ require 'test_helper'
 
 describe Announce do
 
-  before(:each) { Announce.options[:adapter] = 'test' }
-  after(:each) { Announce.options[:adapter] = 'test' }
+  before(:each) { reset_announce }
+  after(:each) { reset_announce }
 
   it 'has a version number' do
     Announce::VERSION.wont_be_nil
