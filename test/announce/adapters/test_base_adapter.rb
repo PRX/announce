@@ -76,7 +76,7 @@ describe Announce::Adapters::BaseAdapter do
     end
 
     it 'returns name for subject, action' do
-      destination_class.name_for('subject', 'action').must_equal 'test_subject_action'
+      destination_class.name_for('subject', 'action').must_equal 'test_announce_subject_action'
     end
 
     it 'initialize with subject, action, options' do
@@ -96,7 +96,7 @@ describe Announce::Adapters::BaseAdapter do
     let(:queue) { queue_class.new('subject', 'action', { foo: 'bar' } ) }
 
     it 'returns a queue name for subject, action, and this app' do
-      q = queue_class.name_for('subject', 'action').must_equal 'test_app_subject_action'
+      q = queue_class.name_for('subject', 'action').must_equal 'test_announce_app_subject_action'
     end
   end
 end

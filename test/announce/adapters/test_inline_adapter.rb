@@ -23,8 +23,8 @@ describe Announce::Adapters::InlineAdapter do
     it 'implements subscribe' do
       subscriber.subscribe(TestSubscriber, 'subject', ['create', 'delete'], {})
       subs = Announce::Adapters::InlineAdapter.subscriptions
-      subs['test_app_subject_create'].must_equal TestSubscriber
-      subs['test_app_subject_delete'].must_equal TestSubscriber
+      subs['test_announce_app_subject_create'].must_equal TestSubscriber
+      subs['test_announce_app_subject_delete'].must_equal TestSubscriber
     end
   end
 

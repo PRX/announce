@@ -24,31 +24,12 @@ module Announce
     end
 
     def options
-      @options ||= default_options
+      @options ||= Announce::Configuration.default_options
     end
 
     def configure(opts = {})
       Announce::Configuration.configure(opts)
       yield @options if block_given?
-    end
-
-    def default_options
-      {}.tap do |defaults|
-        if defined?(ActiveJob)
-          defaults[:name_prefix] = ::ActiveJob::Base.queue_name_prefix
-          defaults[:name_delimiter] = ::ActiveJob::Base.queue_name_delimiter
-          defaults[:adapter] = aj_queue_adapter_name
-        else
-          defaults[:name_prefix] = ENV['RAILS_ENV'] || ENV['APP_ENV'] || 'development'
-          defaults[:name_delimiter] = '_'
-          defaults[:adapter] = :inline
-        end
-      end
-    end
-
-    def aj_queue_adapter_name
-      ajqa = ::ActiveJob::Base.queue_adapter.name
-      ajqa.match(/ActiveJob::QueueAdapters::(.*)Adapter/)[1].underscore
     end
 
     def adapter_class

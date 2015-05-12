@@ -27,6 +27,7 @@ end
 
 class TestSubscriber
 
+  include Shoryuken::Worker
   include Announce::Subscriber
 
   @@received = []
@@ -67,7 +68,7 @@ end
 def reset_announce
   Announce.logger = Logger.new('/dev/null')
   Announce.options[:adapter] = 'test'
-  Announce.options[:name_prefix] = 'test'
+  Announce.options[:queue_name_prefix] = 'test'
   Announce.options[:app_name] = 'app'
 end
 

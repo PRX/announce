@@ -26,12 +26,6 @@ describe Announce do
     Announce.configure_broker.must_equal true
   end
 
-  it 'has default options' do
-    defaults = Announce.default_options
-    defaults[:name_prefix].must_equal 'test'
-    defaults[:adapter].must_equal :inline
-  end
-
   it 'can publish a message' do
     Announce.publish('subject', 'action', 'body', {})
   end

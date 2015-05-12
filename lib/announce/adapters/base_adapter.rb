@@ -63,7 +63,7 @@ module Announce
         end
 
         def self.name_for(subject, action)
-          [prefix, subject, action].join(delimiter)
+          [prefix, namespace, subject, action].join(delimiter)
         end
 
         def initialize(subject, action, options = {})
@@ -77,15 +77,19 @@ module Announce
         end
 
         def self.prefix
-          ::Announce.options[:name_prefix]
+          ::Announce.options[:queue_name_prefix]
         end
 
         def self.delimiter
-          ::Announce.options[:name_delimiter]
+          ::Announce.options[:queue_name_delimiter]
         end
 
         def self.app
           ::Announce.options[:app_name]
+        end
+
+        def self.namespace
+          ::Announce.options[:namespace]
         end
       end
 
@@ -94,7 +98,7 @@ module Announce
 
       class Queue < Destination
         def self.name_for(subject, action)
-          [prefix, app, subject, action].join(delimiter)
+          [prefix, namespace, app, subject, action].join(delimiter)
         end
       end
     end
