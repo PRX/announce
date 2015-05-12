@@ -6,6 +6,7 @@ require 'announce/message'
 require 'announce/publisher'
 require 'announce/subscriber'
 require 'announce/version'
+require 'announce/railtie' if defined?(Rails)
 
 module Announce
   class << self
