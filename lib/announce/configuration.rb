@@ -13,18 +13,18 @@ module Announce
     def initialize(options)
       @options = options
       base = defined?(Rails) ? Rails.root : Dir.pwd
-      options[:pub_sub_file] ||= File.join(base, 'config', 'pub_sub.yml')
+      options[:config_file] ||= File.join(base, 'config', 'announce.yml')
     end
 
-    def pub_sub_file
-      options[:pub_sub_file]
+    def config_file
+      options[:config_file]
     end
 
     def configure
-      if File.exist?(pub_sub_file)
-        YAML.load(ERB.new(IO.read(pub_sub_file)).result).deep_symbolize_keys
+      if File.exist?(config_file)
+        YAML.load(ERB.new(IO.read(config_file)).result).deep_symbolize_keys
       else
-        Announce.logger.warn "PubSub file #{pub_sub_file} does not exist"
+        Announce.logger.warn "PubSub file #{config_file} does not exist"
         {}
       end
     end
