@@ -25,7 +25,7 @@ module Announce
         def configure_publishing
           (options[:publish] || {}).each do |subject, actions|
             Array(actions).each do |action|
-              Announce::Adapter::ShoryukenAdapter::Topic(subject, action, options).create
+              ShoryukenAdapter::Topic.new(subject, action, options).create
             end
           end
         end
@@ -33,8 +33,8 @@ module Announce
         def configure_subscribing
           (options[:subscribe] || {}).each do |subject, actions|
             Array(actions).each do |action|
-              topic = Announce::Adapter::ShoryukenAdapter::Topic(subject, action, options)
-              queue = Announce::Adapter::ShoryukenAdapter::Queue(subject, action, options)
+              topic = ShoryukenAdapter::Topic.new(subject, action, options)
+              queue = ShoryukenAdapter::Queue.new(subject, action, options)
               topic.create
               queue.create
               topic.subscribe(queue)
