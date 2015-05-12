@@ -18,8 +18,7 @@ module Announce
 
         # actually configure the broker queues, topics, and subscriptions
         def configure
-          configure_publishing
-          configure_subscribing
+          configure_publishing && configure_subscribing
         end
 
         def configure_publishing
@@ -28,6 +27,7 @@ module Announce
               ShoryukenAdapter::Topic.new(subject, action, options).create
             end
           end
+          true
         end
 
         def configure_subscribing
@@ -40,6 +40,7 @@ module Announce
               topic.subscribe(queue)
             end
           end
+          true
         end
       end
 
@@ -110,7 +111,7 @@ module Announce
           )
 
           attrs = sqs.get_queue_attributes(
-            queue_url: dlq.queue_url,
+            queue_url: dlq[:queue_url],
             attribute_names: ['QueueArn']
           )
 
