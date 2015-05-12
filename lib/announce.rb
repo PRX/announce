@@ -36,7 +36,7 @@ module Announce
         if defined?(ActiveJob)
           defaults[:name_prefix] = ::ActiveJob::Base.queue_name_prefix
           defaults[:name_delimiter] = ::ActiveJob::Base.queue_name_delimiter
-          defaults[:adapter] = ::ActiveJob::Base.queue_adapter
+          defaults[:adapter] = aj_queue_adapter_name
         else
           defaults[:name_prefix] = ENV['RAILS_ENV'] || ENV['APP_ENV'] || 'development'
           defaults[:name_delimiter] = '_'
@@ -45,10 +45,15 @@ module Announce
       end
     end
 
+    def aj_queue_adapter_name
+      ajqa = ::ActiveJob::Base.queue_adapter.name
+      ajqa.match(/ActiveJob::QueueAdapters::(.*)Adapter/)[1].underscore
+    end
+
     def adapter_class
-      adapter = Announce.options[:adapter]
-      require "announce/adapters/#{adapter}_adapter"
-      "::Announce::Adapters::#{adapter.to_s.camelize}Adapter".constantize
+      announce_adapter = Announce.options[:adapter]
+      require "announce/adapters/#{announce_adapter.to_s.downcase}_adapter"
+      "::Announce::Adapters::#{announce_adapter.to_s.camelize}Adapter".constantize
     end
 
     def logger
