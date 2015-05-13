@@ -5,12 +5,42 @@ module Announce
   module Adapters
     class ShoryukenAdapter < BaseAdapter
 
+      class AnnounceWorker #:nodoc:
+        include Shoryuken::Worker
+
+        shoryuken_options body_parser: :json, auto_delete: true
+
+        # overriden in register_class
+        def job_class
+        end
+
+        def perform(sqs_msg, hash)
+          job = job_class.new(hash)
+          Base.execute(job.serialize)
+        end
+      end
+
       class Subscriber < BaseAdapter::Subscriber
+
         def subscribe(worker_class, subject, actions, options)
           Array(actions).each do |action|
             queue_name = Queue.name_for(subject, action)
-            Shoryuken.register_worker(queue_name, worker_class, true)
+            Shoryuken.register_worker(queue_name, register_class(worker_class))
           end
+        end
+
+        def register_class(worker_class)
+          if active_job?
+            Class.new(AnnounceWorker).tap do |jc|
+              jc.class_eval("def job_class; #{worker_class.name}; end")
+            end
+          else
+            worker_class
+          end
+        end
+
+        def active_job?
+          defined?(::ActiveJob) && ::ActiveJob::Base.queue_adapter.to_s == 'shoryuken'
         end
       end
 
@@ -158,58 +188,8 @@ module Announce
           Shoryuken::Client.sqs
         end
       end
-
-      class AnnounceWorker #:nodoc:
-        include Shoryuken::Worker
-
-        attr_accessor :job_class
-
-        shoryuken_options body_parser: :json, auto_delete: true
-
-        def perform(sqs_msg, hash)
-          job = job_class.new(hash)
-          Base.execute(job.serialize)
-        end
-      end
-
-      class AnnounceWorkerRegistry < Shoryuken::DefaultWorkerRegistry
-
-        attr_accessor :subscriptions
-
-        def initialize
-          super
-          @subscribers = {}
-        end
-
-        def clear
-          super
-          @subscribers.clear
-        end
-
-        def fetch_worker(queue, message)
-          super.tap do |worker|
-            if @subscribers[queue] && worker.respond_to?('job_class=')
-              worker.job_class = @subscribers[queue]
-            end
-          end
-        end
-
-        def register_worker(queue, clazz, subscription = false)
-          if subscription && active_job?
-            @subscribers[queue] = clazz
-            clazz = AnnounceWorker
-          end
-          super(queue, clazz)
-        end
-
-        def active_job?
-          defined?(::ActiveJob) && ::ActiveJob::Base.queue_adapter.to_s == 'shoryuken'
-        end
-      end
-
     end
   end
 end
 
-Shoryuken.worker_registry = Announce::Adapters::ShoryukenAdapter::AnnounceWorkerRegistry.new
 Shoryuken::Client.account_id = ENV['AWS_ACCOUNT_ID'] unless Shoryuken::Client.account_id
