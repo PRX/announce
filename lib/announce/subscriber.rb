@@ -1,5 +1,3 @@
-# let's see if we can use active_job for this...
-
 module Announce
   module Subscriber
 
