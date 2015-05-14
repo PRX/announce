@@ -31,5 +31,10 @@ describe 'Announce core extensions' do
       'this_is_sweet'.camelize.must_equal 'ThisIsSweet'
       'yeah/this_is_sweet'.camelize.must_equal 'Yeah::ThisIsSweet'
     end
+
+    it 'changes CamelCase to under_score' do
+      'ThisIsSweet'.underscore.must_equal 'this_is_sweet'
+      'Yeah::ThisIsSweet'.underscore.must_equal 'yeah/this_is_sweet'
+    end
   end
 end

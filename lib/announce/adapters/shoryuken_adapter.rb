@@ -26,6 +26,7 @@ module Announce
           Array(actions).each do |action|
             queue_name = Queue.name_for(subject, action)
             Shoryuken.register_worker(queue_name, register_class(worker_class))
+            Shoryuken.queues << queue_name
           end
         end
 
@@ -40,7 +41,9 @@ module Announce
         end
 
         def active_job?
-          defined?(::ActiveJob) && ::ActiveJob::Base.queue_adapter.to_s == 'shoryuken'
+          defined?(::ActiveJob) &&
+          defined?(ActiveJob::QueueAdapters::ShoryukenAdapter) &&
+          ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::ShoryukenAdapter
         end
       end
 

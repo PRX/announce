@@ -49,9 +49,7 @@ rescue LoadError
       end
       constant
     end
-  end if !"".respond_to?(:constantize)
 
-  class String
     def camelize
       string = self
       string = string.sub(/^[a-z\d]*/) { $&.capitalize }
@@ -59,5 +57,16 @@ rescue LoadError
       string.gsub!(/\//, '::')
       string
     end
-  end if !"".respond_to?(:camelize)
+
+    def underscore
+      camel_cased_word = self
+      return camel_cased_word unless camel_cased_word =~ /[A-Z-]|::/
+      word = camel_cased_word.to_s.gsub(/::/, '/')
+      word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+      word.tr!("-", "_")
+      word.downcase!
+      word
+    end
+  end if !"".respond_to?(:constantize)
 end

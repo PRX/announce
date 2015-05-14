@@ -9,6 +9,7 @@ describe Announce::Adapters::ShoryukenAdapter do
   before {
     Announce.options[:adapter] = :shoryuken
     Shoryuken.logger.level = Logger::ERROR
+    Shoryuken.queues.clear
     config_file = File.join(File.dirname(__FILE__), 'shoryuken.yml')
     Shoryuken::EnvironmentLoader.load(config_file: config_file)
   }

@@ -24,4 +24,32 @@ describe Announce::Configuration do
     Announce.options[:subscribe].wont_be_nil
     Announce.options[:publish].wont_be_nil
   end
+
+  describe 'ActiveJob' do
+    before {
+      module ::ActiveJob
+        module QueueAdapters
+          class FakeAdapter
+          end
+        end
+        class Base
+          class << self
+            def queue_name_prefix; 'activejob'; end
+            def queue_name_delimiter; '-'; end
+            def queue_adapter; ActiveJob::QueueAdapters::FakeAdapter; end
+          end
+        end
+      end
+    }
+
+    after {
+      Object.send(:remove_const, 'ActiveJob')
+    }
+
+    it 'loads config using ActiveJob defaults' do
+      defaults = Announce::Configuration.default_options
+      defaults[:queue_name_prefix].must_equal 'activejob'
+      defaults[:adapter].must_equal 'fake'
+    end
+  end
 end
