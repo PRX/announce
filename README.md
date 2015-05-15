@@ -10,7 +10,7 @@
 
 It supports the publish/subscribe pattern, applied to sending out messages for events structed as `action`s that happen to `subject`s.
 
-Announce does not include its own job processor, as projects will likely already be running a process to handle asynchronous processing. Instead, it is built to integrate with existing job processors, like `shoryuken`, so you don't have some workers written different ways or running in separate processes.
+Announce does not include its own job processor, as projects will likely already be running a process to handle asynchronous jobs. Instead, it is built to integrate with existing job processors, like `shoryuken`, so don't have workers written different ways or running in multiple processes.
 
 You can also write ActiveJob classes to process announce messages, further allowing a consistent abstraction of how asynchronous processing is handled.
 
