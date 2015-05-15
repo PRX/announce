@@ -102,18 +102,39 @@ This file is what is used for configuring SNS/SQS, it is not used to specify wha
 Here is a documented example `announce.yml` file:
 ```yaml
 ################################################################################
-# `app_name`
-# short name of this application or service
-# limit to characters friendly to SQS, it will be used in creating queue names
+# `queue_name_prefix`
+# defaults to config.active_job.queue_name_prefix, RAILS_ENV or APP_ENV in ENV, or 'development'
 ################################################################################
-app_name: my_app
+queue_name_prefix: <%= Rails.env %>
+
+################################################################################
+# `queue_name_delimiter`
+# defaults to config.active_job.queue_name_delimiter or '_'
+################################################################################
+queue_name_delimiter: _
 
 ################################################################################
 # `adapter`
 # which messaging adapter to use
-# if unspecified, will use `config.active_job.queue_adapter` or 'inline'
+# based on config.active_job.queue_adapter or 'inline' if unspecified
 ################################################################################
 adapter: shoryuken
+
+################################################################################
+# `namespace`
+# short name to relate all subjects for all subscribers and publishers
+# limit to characters friendly to SNS/SQS, used in topic and queue names
+# 'announce' is the default if unspecified
+################################################################################
+namespace: announce
+
+################################################################################
+# `app_name`
+# short name of this application or service, added to each published message
+# limit to characters friendly to SQS, used in making queue names
+# 'app' is the default if unspecified
+################################################################################
+app_name: app
 
 ################################################################################
 # `publish`
@@ -148,6 +169,27 @@ queues:
 ```
 
 ## Usage
+
+### Naming
+
+For the shoryuken adapter (and in the abstract base adapter), topics are named in the following way:
+```
+"#{prefix}_#{namespace}_#{subject}_#{action}"
+```
+
+Queues names also include the specific subscriber's app_name:
+```
+"#{prefix}_#{namespace}_#{app_name}_#{subject}_#{action}"
+```
+
+For example, for a production environment, with the app `cms` subscribing to the `story` subject and `update` action, the Topic will be:
+```
+production_announce_story_update
+```
+The cms's subscribing Queue will be named:
+```
+production_announce_cms_story_update
+```
 
 ### Configuring the Broker
 
