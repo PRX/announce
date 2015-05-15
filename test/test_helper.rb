@@ -72,6 +72,7 @@ def reset_announce
   Announce.options[:adapter] = 'test'
   Announce.options[:queue_name_prefix] = 'test'
   Announce.options[:app_name] = 'app'
+  clear_messages
 end
 
 reset_announce

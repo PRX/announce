@@ -30,6 +30,10 @@ describe Announce do
     Announce.publish('subject', 'action', 'body', {})
   end
 
+  it 'can announce a message' do
+    Announce.announce('subject', 'action', 'body', {})
+  end
+
   it 'subscribes a worker' do
     Announce.subscribe(self.class, 'subject', ['action']).must_equal true
   end

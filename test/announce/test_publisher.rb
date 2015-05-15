@@ -13,4 +13,9 @@ describe Announce::Publisher do
     publisher.publish('subject', 'action', { 'foo' => 'bar' }, {})
     last_message['body']['foo'].must_equal 'bar'
   end
+
+  it 'can announce a message' do
+    publisher.announce('subject', 'action', { 'foo' => 'bar' }, {})
+    last_message['body']['foo'].must_equal 'bar'
+  end
 end

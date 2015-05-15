@@ -15,6 +15,8 @@ module Announce
       adapter_class.publish(subject, action, message, options)
     end
 
+    alias announce publish
+
     def subscribe(worker_class, subject, actions = [], options = {})
       adapter_class.subscribe(worker_class, subject, actions, options)
     end
