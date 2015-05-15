@@ -22,6 +22,7 @@ module Announce
           defaults[:adapter] = :inline
         end
 
+        defaults[:app_name] = 'app'
         defaults[:namespace] = 'announce'
       end
     end
