@@ -8,14 +8,15 @@
 
 ### Announce lets your services know about events, and helps you process them.
 
-Announce is a gem to support using pub sub messages for events.
+It supports the publish/subscribe pattern, applied to sending out messages for events structed as `action`s that happen to `subject`s.
 
-It is built on top of other job processors, like `shoryuken` to process the messages.
-You can use ActiveJob classes to process the messages.
+Announce does not include its own job processor, as projects will likely already be running a process to handle asynchronous processing. Instead, it is built to integrate with existing job processors, like `shoryuken`, so you don't have some workers written different ways or running in separate processes.
 
-The basic purpose of it is to send event messages out from one of your services or applications, but without knowing who will receive it.  Then, other services can pick and choose which events to receive by subscribing to them, and having their workers perform work starting with those messages.
+You can also write ActiveJob classes to process announce messages, further allowing a consistent abstraction of how asynchronous processing is handled.
 
-All events are structured as a combination of `subject` and `action`, and those values and the message itself are the required arguments for sending a message:
+With announce, an application or service can send event messages out, but without knowing who will receive them or how they will be processed.  Then, without the publishing app having any awareness, other services can pick and choose which events to receive by subscribing to them, and process them appropriately.
+
+All message events are structured as a combination of `subject` and `action`, and those values and the message itself are the required arguments for sending a message:
 ```ruby
 # You can send a message from the Announce module directly
 Announce.publish(:story, :publish, id: story.id)
