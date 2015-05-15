@@ -14,9 +14,9 @@ Announce does not include its own job processor, as projects will likely already
 
 You can also write ActiveJob classes to process announce messages, further allowing a consistent abstraction of how asynchronous processing is handled.
 
-With announce, an application or service can send event messages out, but without knowing who will receive them or how they will be processed.  Then, without the publishing app having any awareness, other services can pick and choose which events to receive by subscribing to them, and process them appropriately.
+With announce, an application or service can send event messages out, but without knowing who will receive them or how they will be processed.  Other services and applications can pick and choose which events to receive by subscribing to them and process them appropriately, all without the publishing app having any awareness.
 
-All message events are structured as a combination of `subject` and `action`, and those values and the message itself are the required arguments for sending a message:
+Announce messages events are structured as a combination of `subject` and `action` to identify the type of message, and a message body containing the specific data about the event. All three required for sending a message:
 ```ruby
 # You can send a message from the Announce module directly
 Announce.publish(:story, :publish, id: story.id)
@@ -31,8 +31,7 @@ class SomeController
 end
 ```
 
-When building a Ruby app or service to receive messages, subscribe a job class to announcements:
-
+When building a Ruby app or service to receive messages, subscribe a job class to announcements like this:
 ```
 require 'announce'
 
@@ -214,15 +213,42 @@ class SomeCreateJob < ActiveJob::Base
 
   subscribe_to :some, [:create]
 
-  def receive_some_create(message)
-    do_something(message[:id])
+  def receive_some_create(body)
+    do_something(body[:id])
   end
 end
 ```
 
 This works because the `Announce::Subscriber` adds the `subscribe_to` class method, but also a default `perform(*args)` instance method that delegates message handling to a job instance method named `"receive_#{subject}_#{action}"`.
 
-The `announce` gem relies on other libraries to actual handle receiving messages and calling the worker class to process them.
+This default `perform` method only passes the message `body` to `receive_subject_action` methods. The `subject`, but `action` and full `message` object are made available as instance properties of the subscriber.
+```
+require 'announce'
+
+class SomeCreateJob < ActiveJob::Base
+  include Announce::Subscriber
+
+  subscribe_to :some, [:create]
+
+  def receive_some_create(body)
+    puts "subject: #{subject} is some"
+    puts "action: #{action} is create"
+    puts "message: #{message.inspect}"
+  end
+end
+```
+
+The `message` includes the following standard attributes:
+- `message_id`: a uuid,
+- `app`: which app sent this message
+- `sent_at`: UTC timestamp of when the message was published
+
+along with the values from the publish call:
+- `subject`
+- `action`
+- `body`
+
+The `announce` gem relies on other libraries to actually receive messages and call workers to process them.
 
 For `shoryuken`, `subscribe_to` registers the worker for the appropriate queue, and also adds the queue to the list that will be polled by the shoryuken worker process (i.e. you don't need to add the queue to the `config/shoryuken.yml` file, or the command line call).  When starting up the shoryuken process, it should start retrieving messages on the appropriate queues without further shoryuken config.
 
