@@ -31,10 +31,7 @@ class SomeController
 end
 ```
 
-The message should be simple data, (json comaptible), and be something simple that any receiver can parse and understand.
-This may be going to a receiver in a different programming language, so keep it generic.
-
-If you are also building a ruby app/service to receive a message using `announce`, you can use a job class as you would for ActiveJob by also making it a subscriber to announcements:
+When building a Ruby app or service to receive messages, subscribe a job class to announcements:
 
 ```
 require 'announce'
@@ -200,9 +197,9 @@ class SomeController
 end
 ```
 
-As said above, the message `body` should be simple, serializable data, (json comaptible), and be something simple that any receiver can parse and understand.
+The message `body` should be simple and serializable (json compatible), and something that any receiver could parse and understand, so don't include implementation details like specific Ruby classes.
 
-Unlike other job libraries which specify the Ruby `Class` for processing as part of the message, these announcements meant to be decoupled - the sender should make no assumptions about the receiving application(s).
+Unlike other job libraries which specify the Ruby `Class` for processing as part of the message, these announcements are meant to be decoupled - the sender should make no assumptions about the receiving application(s).
 
 
 ### Processing
@@ -236,6 +233,41 @@ For `shoryuken`, `subscribe_to` registers the worker for the appropriate queue, 
 ```
 
 ## Development
+
+### Developing an Adapter Class
+
+Adapter classes should be named with the following module structure: `Announce::Adapters::SomeBrokerAdapter`
+For example, the above would work with the `adapter: some_broker` option in the ActiveJob or `announce.yml` config.
+
+There are only 2 methods required of an adapter class, `publish` and `subscribe`.
+(Optionally, the `configure_broker` method can be provided for the `rake announce:configure_broker` task.)
+
+```ruby
+module Announce
+  module Adapters
+    class SomeBroker
+      class << self
+
+        def publish(subject, action, body, options = {})
+        end
+
+        def subscribe(worker_class, subject, actions = [], options = {})
+        end
+
+        # optional
+        def configure_broker(options)
+        end
+
+      end
+    end
+  end
+end
+```
+
+There is also an abstract `BaseAdapter` which provides basic implementations of the required methods and supporting classes.
+This may or may not be helpful, but is currently used by the `ShoryukenAdapter`.
+
+### General
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
 
