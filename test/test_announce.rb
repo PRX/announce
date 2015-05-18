@@ -28,10 +28,12 @@ describe Announce do
 
   it 'can publish a message' do
     Announce.publish('subject', 'action', 'body', {})
+    last_message['body'].must_equal 'body'
   end
 
   it 'can announce a message' do
     Announce.announce('subject', 'action', 'body', {})
+    last_message['body'].must_equal 'body'
   end
 
   it 'subscribes a worker' do
