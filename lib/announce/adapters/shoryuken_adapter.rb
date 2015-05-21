@@ -16,7 +16,7 @@ module Announce
 
         def perform(sqs_msg, hash)
           job = job_class.new(hash)
-          Base.execute(job.serialize)
+          ActiveJob::Base.execute(job.serialize)
         end
       end
 
