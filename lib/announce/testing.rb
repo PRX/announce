@@ -4,20 +4,28 @@ require 'announce/adapters/test_adapter'
 module Announce
   module Testing
 
+    def published_messages
+      Announce::Adapters::TestAdapter::Topic.published_messages
+    end
+
     def last_message
-      Announce::Adapters::TestAdapter::Topic.published_messages.pop
+      published_messages.last
     end
 
     def clear_messages
-      Announce::Adapters::TestAdapter::Topic.published_messages.clear
+      published_messages.clear
+    end
+
+    def subscriptions
+      Announce::Adapters::TestAdapter::Subscriber.subscriptions
     end
 
     def last_subscription
-      Announce::Adapters::TestAdapter::Subscriber.subscriptions.pop
+      subscriptions.last
     end
 
     def clear_subscriptions
-      Announce::Adapters::TestAdapter::Subscriber.subscriptions.clear
+      subscriptions.clear
     end
 
     def broker_configured?
