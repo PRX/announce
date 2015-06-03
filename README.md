@@ -32,7 +32,7 @@ end
 ```
 
 When building a Ruby app or service to receive messages, subscribe a job class to announcements like this:
-```
+```ruby
 require 'announce'
 
 class SomeCreateJob < ActiveJob::Base
@@ -223,7 +223,7 @@ Announce.announce(:story, :publish, id: story.id, {})
 ```
 
 There is also a module you can include to get `publish` and `announce` methods:
-```
+```ruby
 class SomeController
   include Announce::Publisher
 
@@ -247,7 +247,7 @@ Unlike other job libraries which specify the Ruby `Class` for processing as part
 
 To designate that a Ruby class will process a message, you must include the `Announce:Subscriber` module and call `subscribe_to` class method.
 
-```
+```ruby
 require 'announce'
 
 class SomeCreateJob < ActiveJob::Base
@@ -264,7 +264,7 @@ end
 This works because the `Announce::Subscriber` adds the `subscribe_to` class method, but also a default `perform(*args)` instance method that delegates message handling to a job instance method named `"receive_#{subject}_#{action}"`.
 
 This default `perform` method only passes the message `body` to `receive_subject_action` methods. The `subject`, but `action` and full `message` object are made available as instance properties of the subscriber.
-```
+```ruby
 require 'announce'
 
 class SomeCreateJob < ActiveJob::Base
@@ -301,6 +301,42 @@ For `shoryuken`, `subscribe_to` registers the worker for the appropriate queue, 
 ```
 
 ## Development
+
+### Testing with Announce
+
+There is an Announce::Testing module which provides helper methods useful in your tests.
+To use them add the following lines into your test/spec helper:
+```ruby
+# use the testing helper
+require 'announce/testing'
+
+# include the methods - could also include in your base test class
+include Announce::Testing
+
+# this resets announce to use test settings, and clears messages
+reset_announce
+
+```
+
+Then you can use the following methods in your test class:
+
+`published_messages` - returns the array of published messages
+
+`last_message` - returns the last message published to announce
+
+`clear_messages` - clears all published messages
+
+`subscriptions` - returns the array of all subscriptions
+
+`last_subscription` - returns most recently added subscription
+
+`clear_subscriptions` - clears all subscriptions
+
+`broker_configured?` - returns whether or not the broker has been configured
+
+`reset_broker_config` - resets broker
+
+`reset_announce` - resets announce to use test adapter, prefix, app, and logging to `/dev/null`
 
 ### Developing an Adapter Class
 
