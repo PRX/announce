@@ -43,7 +43,8 @@ module Announce
         def active_job?
           defined?(::ActiveJob) &&
           defined?(ActiveJob::QueueAdapters::ShoryukenAdapter) &&
-          ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::ShoryukenAdapter
+          ( ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::ShoryukenAdapter ||
+          ActiveJob::Base.queue_adapter.instance_of?(ActiveJob::QueueAdapters::ShoryukenAdapter) )
         end
       end
 
