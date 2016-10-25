@@ -33,6 +33,7 @@ module Announce
         def register_class(worker_class)
           if active_job?
             Class.new(AnnounceWorker).tap do |jc|
+              jc.class_eval("shoryuken_options body_parser: :json, auto_delete: true")
               jc.class_eval("def job_class; #{worker_class.name}; end")
             end
           else
@@ -43,8 +44,8 @@ module Announce
         def active_job?
           defined?(::ActiveJob) &&
           defined?(ActiveJob::QueueAdapters::ShoryukenAdapter) &&
-          ( ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::ShoryukenAdapter ||
-          ActiveJob::Base.queue_adapter.instance_of?(ActiveJob::QueueAdapters::ShoryukenAdapter) )
+          (ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::ShoryukenAdapter ||
+          ActiveJob::Base.queue_adapter.instance_of?(ActiveJob::QueueAdapters::ShoryukenAdapter))
         end
       end
 
