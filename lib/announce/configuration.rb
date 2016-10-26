@@ -28,7 +28,11 @@ module Announce
     end
 
     def self.aj_queue_adapter_name
-      ajqa = ::ActiveJob::Base.queue_adapter.name
+      ajqa = if ::ActiveJob::Base.queue_adapter.respond_to?(:name)
+              ::ActiveJob::Base.queue_adapter.name
+            else
+              ::ActiveJob::Base.queue_adapter.class.name
+            end
       ajqa.match(/ActiveJob::QueueAdapters::(.*)Adapter/)[1].underscore
     end
 
