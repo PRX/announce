@@ -1,4 +1,3 @@
-require 'announce'
 require 'announce/adapters/test_adapter'
 
 module Announce
