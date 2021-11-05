@@ -18,7 +18,6 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'announce'
 require 'announce/testing'
-# require 'announce/adapters/test_adapter'
 
 require 'minitest/autorun'
 require 'minitest/spec'
