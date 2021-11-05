@@ -41,8 +41,8 @@ module Announce
         attr_accessor :options
 
         # uses the configuration
-        def initialize(options = Announce.options)
-          @options = options
+        def initialize(options = {})
+          @options = Announce.options.merge(options)
         end
 
         # actually configure the broker queues, topics, and subscriptions
@@ -60,6 +60,10 @@ module Announce
 
         def create
           raise NotImplementedError.new("You must implement create.")
+        end
+
+        def verify
+          raise NotImplementedError.new("You must implement verify.")
         end
 
         def self.name_for(subject, action)

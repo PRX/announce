@@ -21,8 +21,8 @@ module Announce
       adapter_class.subscribe(worker_class, subject, actions, options)
     end
 
-    def configure_broker
-      adapter_class.configure_broker(options)
+    def configure_broker(opts = {})
+      adapter_class.configure_broker(options.merge(opts))
     end
 
     def options

@@ -27,6 +27,13 @@ describe Announce::Adapters::BaseAdapter do
     broker_configured?.must_equal true
   end
 
+  it 'can configure the broker without creating queues or topics' do
+    reset_broker_config
+    broker_configured?.must_equal false
+    base_adapter_class.configure_broker({ verify_only: true })
+    broker_configured?.must_equal true
+  end
+
   describe 'Subscriber' do
     let(:subscriber_class) { Announce::Adapters::BaseAdapter::Subscriber }
     let(:subscriber) { subscriber_class.new }
@@ -96,7 +103,7 @@ describe Announce::Adapters::BaseAdapter do
     let(:queue) { queue_class.new('subject', 'action', { foo: 'bar' } ) }
 
     it 'returns a queue name for subject, action, and this app' do
-      q = queue_class.name_for('subject', 'action').must_equal 'test_announce_app_subject_action'
+      queue_class.name_for('subject', 'action').must_equal 'test_announce_app_subject_action'
     end
   end
 end
