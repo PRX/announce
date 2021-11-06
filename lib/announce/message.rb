@@ -1,3 +1,4 @@
+require 'securerandom'
 require 'json'
 
 module Announce
@@ -7,7 +8,7 @@ module Announce
 
     def initialize(options={})
       @options = {
-        'message_id' => SecureRandom.uuid,
+        'message_id' => ::SecureRandom.uuid,
         'app' => app,
         'sent_at' => Time.now.utc
       }.merge(options).stringify_keys
