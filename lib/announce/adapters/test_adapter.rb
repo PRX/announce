@@ -50,10 +50,20 @@ module Announce
         def create
           true
         end
+
+        def verify
+          Announce.logger.debug("#{self.class.name}: verify #{name}")
+          true
+        end
       end
 
       class Queue < BaseAdapter::Queue
         def create
+          true
+        end
+
+        def verify
+          Announce.logger.debug("#{self.class.name}: verify #{name}")
           true
         end
       end
