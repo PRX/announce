@@ -1,5 +1,4 @@
 require 'shoryuken'
-require 'announce'
 require 'announce/message'
 
 module Announce
