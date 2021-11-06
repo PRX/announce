@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'growl'
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'listen', '~> 3.2.0'
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'simplecov'
