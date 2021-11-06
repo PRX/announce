@@ -11,7 +11,7 @@ describe Announce::Adapters::InlineAdapter do
   let(:inline_adapter_class) { Announce::Adapters::InlineAdapter }
 
   it 'can load an adapter class' do
-    inline_adapter_class.adapter_constantize(:topic).must_equal Announce::Adapters::InlineAdapter::Topic
+    _(inline_adapter_class.adapter_constantize(:topic)).must_equal Announce::Adapters::InlineAdapter::Topic
   end
 
   describe 'Subscriber' do
@@ -23,8 +23,8 @@ describe Announce::Adapters::InlineAdapter do
     it 'implements subscribe' do
       subscriber.subscribe(TestSubscriber, 'subject', ['create', 'delete'], {})
       subs = Announce::Adapters::InlineAdapter.subscriptions
-      subs['test_announce_app_subject_create'].must_equal TestSubscriber
-      subs['test_announce_app_subject_delete'].must_equal TestSubscriber
+      _(subs['test_announce_app_subject_create']).must_equal TestSubscriber
+      _(subs['test_announce_app_subject_delete']).must_equal TestSubscriber
     end
   end
 
@@ -44,7 +44,7 @@ describe Announce::Adapters::InlineAdapter do
       msg = Announce::Message.new(subject: topic.subject, action: topic.action, body: { subject_id: 1 } )
       topic.publish(msg.to_message)
       received = TestSubscriber.received.pop
-      received[:subject_id].must_equal 1
+      _(received[:subject_id]).must_equal 1
     end
   end
 end
