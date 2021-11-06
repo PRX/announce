@@ -51,13 +51,22 @@ module Announce
 
         # actually configure the broker queues, topics, and subscriptions
         def configure
+          if options[:verify_only]
+            Announce.logger.warn("Running Announce BrokerManager configure in verify_only mode.")
+            Announce.logger.warn("No topics, queues, or subscriptions will be created, please verify the logged resources exist.")
+          end
           configure_publishing && configure_subscribing
         end
 
         def configure_publishing
           (options[:publish] || {}).each do |subject, actions|
             Array(actions).each do |action|
-              ShoryukenAdapter::Topic.new(subject, action, options).create
+              topic = ShoryukenAdapter::Topic.new(subject, action, options)
+              if options[:verify_only]
+                topic.verify
+              else
+                topic.create
+              end
             end
           end
           true
@@ -68,9 +77,15 @@ module Announce
             Array(actions).each do |action|
               topic = ShoryukenAdapter::Topic.new(subject, action, options)
               queue = ShoryukenAdapter::Queue.new(subject, action, options)
-              topic.create
-              queue.create
-              topic.subscribe(queue)
+              if options[:verify_only]
+                topic.verify
+                queue.verify
+                topic.verify_subscription(queue)
+              else
+                topic.create
+                queue.create
+                topic.subscribe(queue)
+              end
             end
           end
           true
@@ -85,6 +100,14 @@ module Announce
 
         def create
           sns.create_topic(name: name)[:topic_arn]
+        end
+
+        def verify
+          Announce.logger.warn("Verify SNS Topic: #{arn}")
+        end
+
+        def verify_subscription(queue)
+          Announce.logger.warn("Verify Subscription:\n\tfrom SNS Topic: #{arn}\n\tto SQS Queue: #{queue.arn}")
         end
 
         def subscribe(queue)
@@ -115,13 +138,19 @@ module Announce
 
       class Queue < BaseAdapter::Queue
 
-        def create
-          create_attributes = default_options.merge((options[:queues] || {}).stringify_keys)
+        DLQ_SUFFIX = "failures"
 
+        def create
           dlq_arn = create_dlq
+
+          create_attributes = default_options.merge((options[:queues] || {}).stringify_keys)
           create_attributes['RedrivePolicy'] = %Q{{"maxReceiveCount":"10", "deadLetterTargetArn":"#{dlq_arn}"}"}
 
           sqs.create_queue(queue_name: name, attributes: create_attributes)[:queue_url]
+        end
+
+        def verify
+          Announce.logger.warn("Verify SQS Queue: #{arn}\n\t with DLQ: #{dlq_arn}")
         end
 
         def arn
@@ -131,8 +160,6 @@ module Announce
         end
 
         def create_dlq
-          dlq_name = "#{name}_failures"
-
           dlq_options = {
             'MaximumMessageSize' => "#{(256 * 1024)}",
             'MessageRetentionPeriod' => "#{2 * 7 * 24 * 60 * 60}" # 2 weeks in seconds
@@ -149,6 +176,14 @@ module Announce
           )
 
           attrs.attributes['QueueArn']
+        end
+
+        def dlq_arn
+          [arn, DLQ_SUFFIX].join(self.class.delimiter)
+        end
+
+        def dlq_name
+          [name, DLQ_SUFFIX].join(self.class.delimiter)
         end
 
         def default_options
