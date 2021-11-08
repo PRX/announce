@@ -69,8 +69,8 @@ describe Announce::Adapters::ShoryukenAdapter do
     it "verifies configuration" do
       logging_io = StringIO.new
       Announce.logger = Logger.new(logging_io)
-      verify_manager =
-        manager_class.new(broker_options.merge({ verify_only: true }))
+      opts = broker_options.merge(verify_only: true)
+      verify_manager = manager_class.new(opts)
       verify_manager.configure
       Announce.logger = Logger.new("/dev/null")
       logging = logging_io.string

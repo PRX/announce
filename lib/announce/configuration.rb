@@ -48,7 +48,7 @@ module Announce
       defaults = self.class.default_options
       if File.exist?(config_file)
         defaults.merge(
-          YAML.load(ERB.new(IO.read(config_file)).result).symbolize_keys
+          YAML.safe_load(ERB.new(IO.read(config_file)).result).symbolize_keys
         )
       else
         Announce.logger.warn "PubSub file #{config_file} does not exist"

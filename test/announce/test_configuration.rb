@@ -35,9 +35,11 @@ describe Announce::Configuration do
             def queue_name_prefix
               "activejob"
             end
+
             def queue_name_delimiter
               "-"
             end
+
             def queue_adapter
               ActiveJob::QueueAdapters::FakeAdapter
             end
