@@ -1,16 +1,13 @@
 module Announce
   module Subscriber
-
     def self.included(base)
-      base.class_eval do
-        attr_accessor :subject, :action, :message
-      end
+      base.class_eval { attr_accessor :subject, :action, :message }
 
       base.extend(ClassMethods)
     end
 
     module ClassMethods
-      def subscribe_to(subject, actions=[], options = {})
+      def subscribe_to(subject, actions = [], options = {})
         Announce.subscribe(self, subject, actions, options)
       end
     end
@@ -25,19 +22,20 @@ module Announce
       @subject = message[:subject]
       @action = message[:action]
 
-      if [message, subject, action].any? { |a| a.nil? }
-        raise "Message, subject, and action are not all specified for '#{event.inspect}'"
+      if [message, subject, action].any?(&:nil?)
+        raise "Missing message, subject, or action for '#{event.inspect}'"
       end
 
       if respond_to?(delegate_method)
         public_send(delegate_method, message[:body])
       else
-        raise "`#{self.class.name}` is subscribed, but doesn't implement `#{delegate_method}` for '#{event.inspect}'"
+        raise "`#{self.class.name}` subscribed, but doesn't implement " \
+                "`#{delegate_method}` for '#{event.inspect}'"
       end
     end
 
     def delegate_method(message = @message)
-      ['receive', message[:subject], message[:action]].join('_')
+      ["receive", message[:subject], message[:action]].join("_")
     end
   end
 end

@@ -1,33 +1,37 @@
-require 'announce'
-require 'announce/message'
+require "announce"
+require "announce/message"
 
-# publish, subscribe, and configure_broker are the 3 required methods for an adapter
-# this base adapter also has some helpful base classes, but they are not necessary
-# you could write an adapter from scratch so long as the class has these 3 class methods.
+# publish, subscribe, & configure_broker are the 3 required methods for adapters
+# the base adapter also has helpful base classes, but they are not necessary
+# you can write an adapter from scratch, but these 3 class methods are required.
 module Announce
   module Adapters
     class BaseAdapter
-
       class << self
-
+        # required
         def publish(subject, action, body, options = {})
           topic = adapter_constantize(:topic).new(subject, action, options)
-          msg = Announce::Message.new(subject: subject, action: action, body: body)
+          msg =
+            Announce::Message.new(subject: subject, action: action, body: body)
           topic.publish(msg.to_message, options)
         end
 
+        # required
         def subscribe(worker_class, subject, actions = [], options = {})
           subscriber = adapter_constantize(:subscriber).new
           subscriber.subscribe(worker_class, subject, actions, options)
         end
 
+        # required
         def configure_broker(options)
           broker_manager = adapter_constantize(:broker_manager).new(options)
           broker_manager.configure
         end
 
         def adapter_constantize(name)
-          "::Announce::Adapters::#{Announce.options[:adapter].to_s.camelize}Adapter::#{name.to_s.camelize}".constantize
+          a_klass = Announce.options[:adapter].to_s.camelize
+          klass = name.to_s.camelize
+          "::Announce::Adapters::#{a_klass}Adapter::#{klass}".constantize
         end
       end
 
@@ -97,8 +101,7 @@ module Announce
         end
       end
 
-      class Topic < Destination
-      end
+      class Topic < Destination; end
 
       class Queue < Destination
         def self.name_for(subject, action)

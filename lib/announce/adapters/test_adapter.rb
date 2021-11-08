@@ -1,11 +1,9 @@
-require 'announce/adapters/base_adapter'
+require "announce/adapters/base_adapter"
 
 module Announce
   module Adapters
     class TestAdapter < BaseAdapter
-
       class Subscriber < BaseAdapter::Subscriber
-
         @@subscriptions = []
 
         def self.subscriptions
@@ -35,7 +33,6 @@ module Announce
       end
 
       class Topic < BaseAdapter::Topic
-
         @@published_messages = []
 
         def self.published_messages

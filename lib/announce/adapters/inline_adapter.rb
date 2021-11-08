@@ -1,9 +1,8 @@
-require 'announce/adapters/base_adapter'
+require "announce/adapters/base_adapter"
 
 module Announce
   module Adapters
     class InlineAdapter < BaseAdapter
-
       def self.subscriptions
         @@subscriptions ||= {}
       end
@@ -34,8 +33,7 @@ module Announce
         end
       end
 
-      class Queue < BaseAdapter::Queue
-      end
+      class Queue < BaseAdapter::Queue; end
     end
   end
 end

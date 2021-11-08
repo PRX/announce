@@ -1,17 +1,16 @@
-require 'logger'
+require "logger"
 
-require 'announce/configuration'
-require 'announce/core_ext'
-require 'announce/message'
-require 'announce/publisher'
-require 'announce/subscriber'
-require 'announce/version'
-require 'announce/railtie' if defined?(Rails)
+require "announce/configuration"
+require "announce/core_ext"
+require "announce/message"
+require "announce/publisher"
+require "announce/subscriber"
+require "announce/version"
+require "announce/railtie" if defined?(Rails)
 
 module Announce
   class << self
-
-    def publish(subject, action, message, options={})
+    def publish(subject, action, message, options = {})
       adapter_class.publish(subject, action, message, options)
     end
 
@@ -37,15 +36,12 @@ module Announce
     def adapter_class
       announce_adapter = Announce.options[:adapter]
       require "announce/adapters/#{announce_adapter.to_s.downcase}_adapter"
-      "::Announce::Adapters::#{announce_adapter.to_s.camelize}Adapter".constantize
+      "::Announce::Adapters::#{announce_adapter.to_s.camelize}Adapter"
+        .constantize
     end
 
     def logger
-      @logger ||= if defined?(Rails)
-        Rails.logger
-      else
-        Logger.new(STDOUT)
-      end
+      @logger ||= defined?(Rails) ? Rails.logger : Logger.new(STDOUT)
     end
 
     def logger=(l)

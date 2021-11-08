@@ -1,5 +1,5 @@
-require 'yaml'
-require 'erb'
+require "yaml"
+require "erb"
 
 module Announce
   class Configuration
@@ -14,16 +14,18 @@ module Announce
       {}.tap do |defaults|
         if defined?(ActiveJob)
           defaults[:queue_name_prefix] = ::ActiveJob::Base.queue_name_prefix
-          defaults[:queue_name_delimiter] = ::ActiveJob::Base.queue_name_delimiter
+          defaults[:queue_name_delimiter] =
+            ::ActiveJob::Base.queue_name_delimiter
           defaults[:adapter] = aj_queue_adapter_name
         else
-          defaults[:queue_name_prefix] = ENV['RAILS_ENV'] || ENV['APP_ENV'] || 'development'
-          defaults[:queue_name_delimiter] = '_'
+          defaults[:queue_name_prefix] =
+            ENV["RAILS_ENV"] || ENV["APP_ENV"] || "development"
+          defaults[:queue_name_delimiter] = "_"
           defaults[:adapter] = :inline
         end
 
-        defaults[:app_name] = 'app'
-        defaults[:namespace] = 'announce'
+        defaults[:app_name] = "app"
+        defaults[:namespace] = "announce"
       end
     end
 
@@ -35,7 +37,7 @@ module Announce
     def initialize(options)
       @options = options
       base = defined?(Rails) ? Rails.root : Dir.pwd
-      options[:config_file] ||= File.join(base, 'config', 'announce.yml')
+      options[:config_file] ||= File.join(base, "config", "announce.yml")
     end
 
     def config_file
@@ -45,7 +47,9 @@ module Announce
     def configure
       defaults = self.class.default_options
       if File.exist?(config_file)
-        defaults.merge(YAML.load(ERB.new(IO.read(config_file)).result).symbolize_keys)
+        defaults.merge(
+          YAML.load(ERB.new(IO.read(config_file)).result).symbolize_keys
+        )
       else
         Announce.logger.warn "PubSub file #{config_file} does not exist"
         defaults
