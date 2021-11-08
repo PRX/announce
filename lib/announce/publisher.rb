@@ -1,6 +1,5 @@
-require 'shoryuken'
-require 'announce'
-require 'announce/message'
+require "shoryuken"
+require "announce/message"
 
 module Announce
   module Publisher

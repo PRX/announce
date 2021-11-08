@@ -1,9 +1,7 @@
-require 'announce'
 require 'announce/adapters/test_adapter'
 
 module Announce
   module Testing
-
     def published_messages
       Announce::Adapters::TestAdapter::Topic.published_messages
     end

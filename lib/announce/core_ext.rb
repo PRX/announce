@@ -1,7 +1,7 @@
 begin
-  require 'active_support/core_ext/hash/keys'
-  require 'active_support/core_ext/hash/deep_merge'
-  require 'active_support/core_ext/hash/slice'
+  require "active_support/core_ext/hash/keys"
+  require "active_support/core_ext/hash/deep_merge"
+  require "active_support/core_ext/hash/slice"
 rescue LoadError
   class Hash
     def stringify_keys
@@ -36,11 +36,11 @@ rescue LoadError
 end
 
 begin
-  require 'active_support/core_ext/string/inflections'
+  require "active_support/core_ext/string/inflections"
 rescue LoadError
   class String
     def constantize
-      names = self.split('::')
+      names = self.split("::")
       names.shift if names.empty? || names.first.empty?
 
       constant = Object
@@ -54,14 +54,14 @@ rescue LoadError
       string = self
       string = string.sub(/^[a-z\d]*/) { $&.capitalize }
       string.gsub!(/(?:_|(\/))([a-z\d]*)/i) { "#{$1}#{$2.capitalize}" }
-      string.gsub!(/\//, '::')
+      string.gsub!(/\//, "::")
       string
     end
 
     def underscore
       camel_cased_word = self
       return camel_cased_word unless camel_cased_word =~ /[A-Z-]|::/
-      word = camel_cased_word.to_s.gsub(/::/, '/')
+      word = camel_cased_word.to_s.gsub(/::/, "/")
       word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
       word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
       word.tr!("-", "_")
