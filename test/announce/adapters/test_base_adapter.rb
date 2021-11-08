@@ -32,7 +32,7 @@ describe Announce::Adapters::BaseAdapter do
   it "can configure the broker without creating queues or topics" do
     reset_broker_config
     _(broker_configured?).must_equal false
-    base_adapter_class.configure_broker({ verify_only: true })
+    base_adapter_class.configure_broker(verify_only: true)
     _(broker_configured?).must_equal true
   end
 
@@ -71,7 +71,7 @@ describe Announce::Adapters::BaseAdapter do
   describe "Destination" do
     let(:destination_class) { Announce::Adapters::BaseAdapter::Destination }
     let(:destination) do
-      destination_class.new("subject", "action", { foo: "bar" })
+      destination_class.new("subject", "action", foo: "bar")
     end
 
     it "does not implement publish" do
@@ -91,7 +91,7 @@ describe Announce::Adapters::BaseAdapter do
     end
 
     it "initialize with subject, action, options" do
-      d = destination_class.new("subject", "action", { foo: "bar" })
+      d = destination_class.new("subject", "action", foo: "bar")
       _(d.subject).must_equal "subject"
       _(d.action).must_equal "action"
       _(d.options[:foo]).must_equal "bar"
@@ -104,7 +104,7 @@ describe Announce::Adapters::BaseAdapter do
 
   describe "Queue" do
     let(:queue_class) { Announce::Adapters::BaseAdapter::Queue }
-    let(:queue) { queue_class.new("subject", "action", { foo: "bar" }) }
+    let(:queue) { queue_class.new("subject", "action", foo: "bar") }
 
     it "returns a queue name for subject, action, and this app" do
       _(

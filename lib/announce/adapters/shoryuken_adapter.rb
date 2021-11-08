@@ -104,8 +104,9 @@ module Announce
 
         def verify_subscription(queue)
           Announce.logger.warn(
-            "Verify Subscription:\n" + "\tfrom SNS Topic: #{arn}\n" +
-              "\tto SQS Queue: #{queue.arn}"
+            "Verify Subscription:\n"\
+            "  from SNS Topic: #{arn}\n"\
+            "  to SQS Queue: #{queue.arn}"
           )
         end
 
@@ -143,9 +144,7 @@ module Announce
           create_attributes =
             default_options.merge((options[:queues] || {}).stringify_keys)
           create_attributes["RedrivePolicy"] =
-            "{\"maxReceiveCount\":\"10\", \"deadLetterTargetArn\":\"#{
-              dlq_arn
-            }\"}\""
+            '{"maxReceiveCount":"10", "deadLetterTargetArn":"' + dlq_arn + '"}'
 
           sqs.create_queue(queue_name: name, attributes: create_attributes)[
             :queue_url
@@ -166,8 +165,8 @@ module Announce
 
         def create_dlq
           dlq_options = {
-            "MaximumMessageSize" => "#{(256 * 1024)}",
-            "MessageRetentionPeriod" => "#{2 * 7 * 24 * 60 * 60}"
+            "MaximumMessageSize" => (256 * 1024).to_s,
+            "MessageRetentionPeriod" => (2 * 7 * 24 * 60 * 60).to_s
             # 2 weeks in seconds
           }
 
@@ -192,11 +191,11 @@ module Announce
         def default_options
           {
             "DelaySeconds" => "0",
-            "MaximumMessageSize" => "#{256 * 1024}",
-            "VisibilityTimeout" => "#{60 * 60}",
+            "MaximumMessageSize" => (256 * 1024).to_s,
+            "VisibilityTimeout" => (60 * 60).to_s,
             # 1 hour in seconds
             "ReceiveMessageWaitTimeSeconds" => "0",
-            "MessageRetentionPeriod" => "#{7 * 24 * 60 * 60}",
+            "MessageRetentionPeriod" => (7 * 24 * 60 * 60).to_s,
             # 1 week in seconds
             "Policy" => policy
           }
